@@ -1,4 +1,4 @@
-# think-annotation for ThinkPHP6
+# think-annotation for ThinkPHP6,ThinkPHP8
 
 > PHP8版本
 
@@ -19,12 +19,12 @@
 
 namespace app\controller;
 
-use think\annotation\Inject;
-use think\annotation\route\Get;
-use think\annotation\route\Group;
-use think\annotation\route\Middleware;
-use think\annotation\route\Resource;
-use think\annotation\route\Route;
+use yeh110\annotation\Inject;
+use yeh110\annotation\route\Get;
+use yeh110\annotation\route\Group;
+use yeh110\annotation\route\Middleware;
+use yeh110\annotation\route\Resource;
+use yeh110\annotation\route\Route;
 use think\Cache;
 use think\middleware\SessionInit;
 
@@ -83,7 +83,7 @@ class IndexController
 namespace app\model;
 
 use think\Model;
-use think\annotation\model\relation\HasMany;
+use yeh110\annotation\model\relation\HasMany;
 
 #[HasMany("articles", Article::class, "user_id")]
 class User extends Model
@@ -93,4 +93,43 @@ class User extends Model
 }
 ~~~
 
+### 权限注解
+
+~~~php
+<?php
+
+namespace app\controller;
+
+use yeh110\annotation\auth\Auths;
+use yeh110\annotation\auth\Auth;
+
+#[Auths("控制器名称")]
+class User
+{
+    #[Auth('方法一')]
+    public function xx()
+    {
+        //...
+    }
+    #[Auth('方法二', ['auth'=>false])]
+    public function xx()
+    {
+        //...
+    }
+    //...
+}
+~~~
+
+### 权限注解读取
+
+~~~php
+<?php
+
+use yeh110\annotation\InteractsWithAuths;
+
+$dir  = app_path('controller');
+$data = InteractsWithAuths::run($dir);
+print_r($data);
+
+~~~
 
